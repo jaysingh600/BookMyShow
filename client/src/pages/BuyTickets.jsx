@@ -76,6 +76,61 @@ const BuyTickets = () => {
     }
   };
 
+  const handlePayment = async () => {
+    try {
+      const amount = selectedSeats.length * 250; // ₹250 per ticket
+      const res = await fetch('http://localhost:5000/api/payment/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount })
+      });
+      const data = await res.json();
+      
+      if (!data.success) {
+        alert('Failed to create order');
+        return;
+      }
+
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'dummy_key_id',
+        amount: data.order.amount,
+        currency: "INR",
+        name: "CineReserve",
+        description: `Booking for ${selectedSeats.length} seats`,
+        order_id: data.order.id,
+        handler: async function (response) {
+          try {
+            const verifyRes = await fetch('http://localhost:5000/api/payment/verify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(response)
+            });
+            const verifyData = await verifyRes.json();
+            
+            if (verifyData.success) {
+              alert('Payment successful! Your seats are booked.');
+              navigate('/'); // redirect to home
+            } else {
+              alert('Payment verification failed.');
+            }
+          } catch (err) {
+            console.error(err);
+            alert('Error during verification');
+          }
+        },
+        theme: {
+          color: "#dc2626"
+        }
+      };
+      
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error(error);
+      alert('Error initiating payment');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-grayLight flex flex-col py-10 px-4">
       <div className="container mx-auto max-w-4xl bg-white p-8 rounded-xl shadow-lg">
@@ -147,8 +202,8 @@ const BuyTickets = () => {
               <p className="text-lg font-semibold">Selected Seats: {selectedSeats.join(', ')}</p>
               <p className="text-gray-600 text-sm">{selectedSeats.length} ticket(s)</p>
             </div>
-            <button className="bg-primary hover:bg-red-600 text-white px-8 py-3 rounded-lg font-bold shadow-md transition">
-              Proceed to Pay
+            <button onClick={handlePayment} className="bg-primary hover:bg-red-600 text-white px-8 py-3 rounded-lg font-bold shadow-md transition">
+              Proceed to Pay (₹{selectedSeats.length * 250})
             </button>
           </div>
         )}
