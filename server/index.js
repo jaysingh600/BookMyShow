@@ -39,11 +39,51 @@ app.get('/api/health', (req, res) => {
 });
 
 // Socket.io for Real-time
+const lockedSeats = {}; // Format: { showId: { seatId: socketId } }
+
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
   
+  // Send current locked seats when a client joins a show
+  socket.on('joinShow', (showId) => {
+    socket.join(showId);
+    if (!lockedSeats[showId]) {
+      lockedSeats[showId] = {};
+    }
+    socket.emit('initialLockedSeats', lockedSeats[showId]);
+  });
+
+  socket.on('lockSeat', ({ showId, seatId }) => {
+    if (!lockedSeats[showId]) {
+      lockedSeats[showId] = {};
+    }
+    
+    // If seat is not locked, lock it for this user
+    if (!lockedSeats[showId][seatId]) {
+      lockedSeats[showId][seatId] = socket.id;
+      // Broadcast to everyone else in this show that the seat is locked
+      socket.to(showId).emit('seatLocked', { seatId, socketId: socket.id });
+    }
+  });
+
+  socket.on('unlockSeat', ({ showId, seatId }) => {
+    if (lockedSeats[showId] && lockedSeats[showId][seatId] === socket.id) {
+      delete lockedSeats[showId][seatId];
+      socket.to(showId).emit('seatUnlocked', { seatId });
+    }
+  });
+
   socket.on('disconnect', () => {
     console.log('Client disconnected:', socket.id);
+    // Find all seats locked by this socket and unlock them
+    for (const showId in lockedSeats) {
+      for (const seatId in lockedSeats[showId]) {
+        if (lockedSeats[showId][seatId] === socket.id) {
+          delete lockedSeats[showId][seatId];
+          io.to(showId).emit('seatUnlocked', { seatId });
+        }
+      }
+    }
   });
 });
 

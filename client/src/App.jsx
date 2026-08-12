@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import MovieDetails from './pages/MovieDetails';
+import BuyTickets from './pages/BuyTickets';
 
 function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -18,6 +19,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/movie/:id" element={<MovieDetails />} />
+            <Route path="/buytickets/:id" element={<BuyTickets />} />
           </Routes>
         </main>
 
