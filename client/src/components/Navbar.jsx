@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, reset } from '../store/authSlice';
 import { Link } from 'react-router-dom';
 import { FaSearch, FaChevronDown } from 'react-icons/fa';
+import CityModal from './CityModal';
 
 const Navbar = ({ onOpenAuthModal }) => {
   const { user } = useSelector((state) => state.auth);
+  const { selectedCity } = useSelector((state) => state.city);
   const dispatch = useDispatch();
+  const [isCityModalOpen, setIsCityModalOpen] = useState(false);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -32,8 +35,11 @@ const Navbar = ({ onOpenAuthModal }) => {
         </div>
 
         <div className="flex items-center space-x-6">
-          <div className="hidden md:flex items-center space-x-1 cursor-pointer hover:text-gray-300">
-            <span className="text-sm font-medium">Mumbai</span>
+          <div 
+            onClick={() => setIsCityModalOpen(true)}
+            className="hidden md:flex items-center space-x-1 cursor-pointer hover:text-gray-300"
+          >
+            <span className="text-sm font-medium">{selectedCity}</span>
             <FaChevronDown size={10} />
           </div>
           
@@ -67,6 +73,8 @@ const Navbar = ({ onOpenAuthModal }) => {
           </nav>
         </div>
       </div>
+      
+      <CityModal isOpen={isCityModalOpen} onClose={() => setIsCityModalOpen(false)} />
     </header>
   );
 };
