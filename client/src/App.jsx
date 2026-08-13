@@ -6,6 +6,10 @@ import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import MovieDetails from './pages/MovieDetails';
 import BuyTickets from './pages/BuyTickets';
+import AdminLayout from './pages/admin/AdminLayout';
+import ManageCities from './pages/admin/ManageCities';
+import ManageTheatres from './pages/admin/ManageTheatres';
+import ManageAuditoriums from './pages/admin/ManageAuditoriums';
 
 function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -20,6 +24,13 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/movie/:id" element={<MovieDetails />} />
             <Route path="/buytickets/:id" element={<BuyTickets />} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route path="cities" element={<ManageCities />} />
+              <Route path="theatres" element={<ManageTheatres />} />
+              <Route path="auditoriums" element={<ManageAuditoriums />} />
+            </Route>
           </Routes>
         </main>
 

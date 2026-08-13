@@ -10,6 +10,7 @@ import { Server } from 'socket.io';
 // Routes
 import authRoutes from './routes/authRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use(morgan('dev'));
 // Route Middlewares
 app.use('/api/auth', authRoutes);
 app.use('/api/payment', paymentRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Basic Route
 app.get('/api/health', (req, res) => {
