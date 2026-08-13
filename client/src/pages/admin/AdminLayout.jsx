@@ -19,6 +19,12 @@ const AdminLayout = () => {
           <Link to="/admin/auditoriums" className="block px-4 py-2 rounded hover:bg-gray-700">
             Manage Auditoriums
           </Link>
+          <Link to="/admin/movies" className="block px-4 py-2 rounded hover:bg-gray-700">
+            Manage Movies
+          </Link>
+          <Link to="/admin/shows" className="block px-4 py-2 rounded hover:bg-gray-700">
+            Manage Shows
+          </Link>
         </nav>
       </aside>
 

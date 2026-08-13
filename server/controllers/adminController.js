@@ -1,6 +1,8 @@
 import City from '../models/City.js';
 import Theatre from '../models/Theatre.js';
 import Auditorium from '../models/Auditorium.js';
+import Movie from '../models/Movie.js';
+import Show from '../models/Show.js';
 
 export const addCity = async (req, res) => {
   try {
@@ -62,6 +64,51 @@ export const getAuditoriums = async (req, res) => {
       populate: { path: 'city' }
     });
     res.status(200).json({ success: true, auditoriums });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const addMovie = async (req, res) => {
+  try {
+    const { title, description, language, genre, duration, posterUrl, isActive } = req.body;
+    const newMovie = new Movie({ title, description, language, genre, duration, posterUrl, isActive });
+    await newMovie.save();
+    res.status(201).json({ success: true, movie: newMovie });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getMovies = async (req, res) => {
+  try {
+    const movies = await Movie.find();
+    res.status(200).json({ success: true, movies });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const addShow = async (req, res) => {
+  try {
+    const { movie, theatre, auditorium, date, startTime, endTime, pricing, isPublished } = req.body;
+    const newShow = new Show({
+      movie, theatre, auditorium, date, startTime, endTime, pricing, isPublished
+    });
+    await newShow.save();
+    res.status(201).json({ success: true, show: newShow });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getShows = async (req, res) => {
+  try {
+    const shows = await Show.find()
+      .populate('movie')
+      .populate('theatre')
+      .populate('auditorium');
+    res.status(200).json({ success: true, shows });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

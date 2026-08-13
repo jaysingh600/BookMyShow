@@ -2,7 +2,9 @@ import express from 'express';
 import { 
   addCity, getCities, 
   addTheatre, getTheatres, 
-  addAuditorium, getAuditoriums 
+  addAuditorium, getAuditoriums,
+  addMovie, getMovies,
+  addShow, getShows
 } from '../controllers/adminController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
@@ -19,5 +21,11 @@ router.post('/theatres', protect, admin, addTheatre);
 
 router.get('/auditoriums', getAuditoriums);
 router.post('/auditoriums', protect, admin, addAuditorium);
+
+router.get('/movies', getMovies);
+router.post('/movies', protect, admin, addMovie);
+
+router.get('/shows', getShows);
+router.post('/shows', protect, admin, addShow);
 
 export default router;

@@ -10,6 +10,8 @@ import AdminLayout from './pages/admin/AdminLayout';
 import ManageCities from './pages/admin/ManageCities';
 import ManageTheatres from './pages/admin/ManageTheatres';
 import ManageAuditoriums from './pages/admin/ManageAuditoriums';
+import ManageMovies from './pages/admin/ManageMovies';
+import ManageShows from './pages/admin/ManageShows';
 
 function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -30,6 +32,8 @@ function App() {
               <Route path="cities" element={<ManageCities />} />
               <Route path="theatres" element={<ManageTheatres />} />
               <Route path="auditoriums" element={<ManageAuditoriums />} />
+              <Route path="movies" element={<ManageMovies />} />
+              <Route path="shows" element={<ManageShows />} />
             </Route>
           </Routes>
         </main>
