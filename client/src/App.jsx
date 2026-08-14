@@ -5,7 +5,8 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import MovieDetails from './pages/MovieDetails';
-import BuyTickets from './pages/BuyTickets';
+import SeatSelection from './pages/SeatSelection';
+import TheatreListing from './pages/TheatreListing';
 import AdminLayout from './pages/admin/AdminLayout';
 import ManageCities from './pages/admin/ManageCities';
 import ManageTheatres from './pages/admin/ManageTheatres';
@@ -25,7 +26,8 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/movie/:id" element={<MovieDetails />} />
-            <Route path="/buytickets/:id" element={<BuyTickets />} />
+            <Route path="/buytickets/:movieId" element={<TheatreListing />} />
+            <Route path="/seat-layout/:showId" element={<SeatSelection />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>

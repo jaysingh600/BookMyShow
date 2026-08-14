@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 
 const SOCKET_URL = 'http://localhost:5000';
 
-const BuyTickets = () => {
+const SeatSelection = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [socket, setSocket] = useState(null);
@@ -212,4 +212,4 @@ const BuyTickets = () => {
   );
 };
 
-export default BuyTickets;
+export default SeatSelection;
