@@ -1,5 +1,9 @@
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
+import mongoose from 'mongoose';
+import Booking from '../models/Booking.js';
+import Show from '../models/Show.js';
+import SeatHold from '../models/SeatHold.js';
 
 // Initialize Razorpay instance
 const razorpay = new Razorpay({
@@ -45,7 +49,25 @@ export const verifyPayment = async (req, res) => {
     const isAuthentic = expectedSignature === razorpay_signature;
 
     if (isAuthentic) {
-      // In a real app, you would save the booking to the database here
+      const { bookingId } = req.body;
+      if (bookingId) {
+        // Complete the booking
+        const booking = await Booking.findById(bookingId);
+        if (booking && booking.status === 'HOLD') {
+          booking.status = 'CONFIRMED';
+          booking.paymentId = razorpay_payment_id;
+          await booking.save();
+
+          // Move seats to permanently booked
+          await Show.findByIdAndUpdate(booking.show, {
+            $push: { bookedSeats: { $each: booking.seats } }
+          });
+
+          // Delete temporary holds
+          await SeatHold.deleteMany({ bookingId: booking._id });
+        }
+      }
+
       res.status(200).json({ 
         success: true, 
         message: "Payment verified successfully",

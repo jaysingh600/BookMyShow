@@ -144,6 +144,31 @@ const SeatSelection = () => {
       const amount = calculateTotal();
       if(amount === 0) return;
 
+      // 1. Hold the seats
+      const idempotencyKey = `idemp_${Date.now()}_${Math.random()}`;
+      const holdRes = await fetch('http://localhost:5000/api/bookings/hold', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          showId,
+          seats: selectedSeats,
+          totalAmount: amount,
+          idempotencyKey
+        })
+      });
+      const holdData = await holdRes.json();
+
+      if (!holdData.success) {
+        alert(holdData.message || 'Failed to hold seats. They might have just been booked.');
+        // Refresh show data to get latest booked seats
+        fetchShowData();
+        setSelectedSeats([]);
+        return;
+      }
+
+      const bookingId = holdData.booking._id;
+
+      // 2. Initiate Payment
       const res = await fetch('http://localhost:5000/api/payment/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -152,7 +177,7 @@ const SeatSelection = () => {
       const data = await res.json();
       
       if (!data.success) {
-        alert('Failed to create order');
+        alert('Failed to create payment order');
         return;
       }
 
@@ -165,10 +190,11 @@ const SeatSelection = () => {
         order_id: data.order.id,
         handler: async function (response) {
           try {
+            // Include bookingId in the verify request
             const verifyRes = await fetch('http://localhost:5000/api/payment/verify', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(response)
+              body: JSON.stringify({ ...response, bookingId })
             });
             const verifyData = await verifyRes.json();
             
@@ -192,7 +218,7 @@ const SeatSelection = () => {
       rzp.open();
     } catch (error) {
       console.error(error);
-      alert('Error initiating payment');
+      alert('Error initiating booking flow');
     }
   };
 

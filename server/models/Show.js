@@ -12,7 +12,8 @@ const showSchema = new mongoose.Schema({
     Premium: { type: Number, default: 0 },
     Normal: { type: Number, default: 0 }
   },
-  isPublished: { type: Boolean, default: false }
-}, { timestamps: true });
+  isPublished: { type: Boolean, default: false },
+  bookedSeats: [{ type: String }]
+}, { timestamps: true, optimisticConcurrency: true });
 
 export default mongoose.model('Show', showSchema);
