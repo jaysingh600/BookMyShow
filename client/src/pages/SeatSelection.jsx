@@ -168,54 +168,9 @@ const SeatSelection = () => {
 
       const bookingId = holdData.booking._id;
 
-      // 2. Initiate Payment
-      const res = await fetch('http://localhost:5000/api/payment/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount })
-      });
-      const data = await res.json();
-      
-      if (!data.success) {
-        alert('Failed to create payment order');
-        return;
-      }
+      // 2. Navigate to Checkout Summary
+      navigate(`/checkout/${bookingId}`);
 
-      const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'dummy_key_id',
-        amount: data.order.amount,
-        currency: "INR",
-        name: "CineReserve",
-        description: `Booking for ${selectedSeats.length} seats`,
-        order_id: data.order.id,
-        handler: async function (response) {
-          try {
-            // Include bookingId in the verify request
-            const verifyRes = await fetch('http://localhost:5000/api/payment/verify', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ ...response, bookingId })
-            });
-            const verifyData = await verifyRes.json();
-            
-            if (verifyData.success) {
-              alert('Payment successful! Your seats are booked.');
-              navigate('/'); // redirect to home
-            } else {
-              alert('Payment verification failed.');
-            }
-          } catch (err) {
-            console.error(err);
-            alert('Error during verification');
-          }
-        },
-        theme: {
-          color: "#dc2626"
-        }
-      };
-      
-      const rzp = new window.Razorpay(options);
-      rzp.open();
     } catch (error) {
       console.error(error);
       alert('Error initiating booking flow');

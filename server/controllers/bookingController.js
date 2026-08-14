@@ -96,3 +96,26 @@ export const holdSeats = async (req, res) => {
     if (session) session.endSession();
   }
 };
+
+export const getBookingById = async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id)
+      .populate({
+        path: 'show',
+        populate: [
+          { path: 'movie' },
+          { path: 'theatre' },
+          { path: 'auditorium' }
+        ]
+      });
+
+    if (!booking) {
+      return res.status(404).json({ success: false, message: 'Booking not found' });
+    }
+
+    res.status(200).json({ success: true, booking });
+  } catch (error) {
+    console.error('Get booking error:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch booking details.' });
+  }
+};
