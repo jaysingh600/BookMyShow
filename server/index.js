@@ -6,12 +6,16 @@ import morgan from 'morgan';
 import mongoose from 'mongoose';
 import http from 'http';
 import { Server } from 'socket.io';
+import rateLimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
+import xss from 'xss-clean';
 
 // Routes
 import authRoutes from './routes/authRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 dotenv.config();
 
@@ -24,6 +28,9 @@ const io = new Server(server, {
   },
 });
 
+// Attach socket.io to app so it can be used in controllers
+app.set('io', io);
+
 // Middlewares
 app.use(express.json());
 app.use(cors({
@@ -33,11 +40,26 @@ app.use(cors({
 app.use(helmet());
 app.use(morgan('dev'));
 
+// Data sanitization against NoSQL query injection
+app.use(mongoSanitize());
+
+// Data sanitization against XSS
+app.use(xss());
+
+// Rate Limiting
+const limiter = rateLimit({
+  max: 1000,
+  windowMs: 60 * 60 * 1000, // 1 hour
+  message: 'Too many requests from this IP, please try again in an hour!'
+});
+app.use('/api', limiter);
+
 // Route Middlewares
 app.use('/api/auth', authRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/bookings', bookingRoutes);
+app.use('/api/users', userRoutes);
 
 // Basic Route
 app.get('/api/health', (req, res) => {

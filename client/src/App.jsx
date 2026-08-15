@@ -13,8 +13,10 @@ import ManageTheatres from './pages/admin/ManageTheatres';
 import ManageAuditoriums from './pages/admin/ManageAuditoriums';
 import ManageMovies from './pages/admin/ManageMovies';
 import ManageShows from './pages/admin/ManageShows';
+import AdminDashboard from './pages/admin/AdminDashboard';
 import CheckoutSummary from './pages/CheckoutSummary';
 import TicketConfirmation from './pages/TicketConfirmation';
+import UserDashboard from './pages/UserDashboard';
 function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
@@ -31,9 +33,11 @@ function App() {
             <Route path="/seat-layout/:showId" element={<SeatSelection />} />
             <Route path="/checkout/:bookingId" element={<CheckoutSummary />} />
             <Route path="/ticket/:bookingId" element={<TicketConfirmation />} />
+            <Route path="/dashboard" element={<UserDashboard />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
               <Route path="cities" element={<ManageCities />} />
               <Route path="theatres" element={<ManageTheatres />} />
               <Route path="auditoriums" element={<ManageAuditoriums />} />

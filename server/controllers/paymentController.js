@@ -65,6 +65,14 @@ export const verifyPayment = async (req, res) => {
 
           // Delete temporary holds
           await SeatHold.deleteMany({ bookingId: booking._id });
+
+          // Emit socket events
+          if (req.app.get('io')) {
+             req.app.get('io').emit('adminRefresh');
+             // If we had a way to map user to socket ID, we would do io.to(socketId).emit('bookingConfirmed')
+             // For now, we broadcast to the show room that seats are permanently booked
+             req.app.get('io').to(booking.show.toString()).emit('bookingConfirmed', { seats: booking.seats });
+          }
         }
       }
 

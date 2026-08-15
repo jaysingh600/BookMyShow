@@ -10,6 +10,9 @@ const AdminLayout = () => {
           Admin Panel
         </div>
         <nav className="flex-1 p-4 space-y-2">
+          <Link to="/admin" className="block px-4 py-2 rounded hover:bg-gray-700">
+            Dashboard
+          </Link>
           <Link to="/admin/cities" className="block px-4 py-2 rounded hover:bg-gray-700">
             Manage Cities
           </Link>

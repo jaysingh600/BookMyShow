@@ -4,7 +4,8 @@ import {
   addTheatre, getTheatres, 
   addAuditorium, getAuditoriums,
   addMovie, getMovies,
-  addShow, getShows
+  addShow, getShows,
+  getStats
 } from '../controllers/adminController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
@@ -27,5 +28,7 @@ router.post('/movies', protect, admin, addMovie);
 
 router.get('/shows', getShows);
 router.post('/shows', protect, admin, addShow);
+
+router.get('/stats', protect, admin, getStats);
 
 export default router;
