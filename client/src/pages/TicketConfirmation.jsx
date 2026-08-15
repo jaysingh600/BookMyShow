@@ -12,24 +12,23 @@ const TicketConfirmation = () => {
   const ticketRef = useRef(null);
 
   useEffect(() => {
+    const fetchBookingDetails = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/bookings/${bookingId}`);
+        const data = await res.json();
+        if (data.success) {
+          setBooking(data.booking);
+        } else {
+          alert('Booking not found.');
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchBookingDetails();
   }, [bookingId]);
-
-  const fetchBookingDetails = async () => {
-    try {
-      const res = await fetch(`http://localhost:5000/api/bookings/${bookingId}`);
-      const data = await res.json();
-      if (data.success) {
-        setBooking(data.booking);
-      } else {
-        alert('Booking not found.');
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const downloadPDF = async () => {
     const input = ticketRef.current;

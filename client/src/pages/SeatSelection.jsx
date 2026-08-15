@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { FaSearchPlus, FaSearchMinus } from 'react-icons/fa';
@@ -14,44 +14,9 @@ const SeatSelection = () => {
   const [showData, setShowData] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(1);
 
-  // Mock booked seats (Red) for demonstration
-  const [bookedSeats, setBookedSeats] = useState(['A3', 'A4', 'C5', 'C6']);
+  const [bookedSeats] = useState(['A3', 'A4', 'C5', 'C6']);
 
-  useEffect(() => {
-    fetchShowData();
-
-    // Initialize socket connection
-    const newSocket = io(SOCKET_URL);
-    setSocket(newSocket);
-
-    // Join the show room
-    newSocket.emit('joinShow', showId);
-
-    // Listen for initial locked seats
-    newSocket.on('initialLockedSeats', (seats) => {
-      setLockedSeats(seats || {});
-    });
-
-    // Listen for a seat being locked by someone else
-    newSocket.on('seatLocked', ({ seatId, socketId }) => {
-      setLockedSeats((prev) => ({ ...prev, [seatId]: socketId }));
-    });
-
-    // Listen for a seat being unlocked
-    newSocket.on('seatUnlocked', ({ seatId }) => {
-      setLockedSeats((prev) => {
-        const updated = { ...prev };
-        delete updated[seatId];
-        return updated;
-      });
-    });
-
-    return () => {
-      newSocket.disconnect();
-    };
-  }, [showId]);
-
-  const fetchShowData = async () => {
+  const fetchShowData = useCallback(async () => {
     try {
       const res = await fetch('http://localhost:5000/api/admin/shows');
       const data = await res.json();
@@ -60,7 +25,6 @@ const SeatSelection = () => {
         if (currentShow) {
           setShowData(currentShow);
         } else {
-          // Mock Data Fallback for testing with mock showId
           setShowData({
             _id: showId,
             movie: { title: "Movie Name" },
@@ -90,7 +54,36 @@ const SeatSelection = () => {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [showId]);
+
+  useEffect(() => {
+    fetchShowData();
+
+    const newSocket = io(SOCKET_URL);
+    setSocket(newSocket);
+
+    newSocket.emit('joinShow', showId);
+
+    newSocket.on('initialLockedSeats', (seats) => {
+      setLockedSeats(seats || {});
+    });
+
+    newSocket.on('seatLocked', ({ seatId, socketId }) => {
+      setLockedSeats((prev) => ({ ...prev, [seatId]: socketId }));
+    });
+
+    newSocket.on('seatUnlocked', ({ seatId }) => {
+      setLockedSeats((prev) => {
+        const updated = { ...prev };
+        delete updated[seatId];
+        return updated;
+      });
+    });
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [showId, fetchShowData]);
 
   const getSeatCategory = (rowLabel) => {
     if (!showData || !showData.auditorium.rowCategories) return 'Normal';

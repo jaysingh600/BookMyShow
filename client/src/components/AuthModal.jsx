@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { login, register, reset } from '../store/authSlice';
 import { MdClose } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
-import { FaEnvelope } from 'react-icons/fa';
 
 const AuthModal = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);

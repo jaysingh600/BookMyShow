@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaHeart, FaRegHeart, FaInfoCircle } from 'react-icons/fa';
+import { FaRegHeart, FaInfoCircle } from 'react-icons/fa';
 
 const TheatreListing = () => {
   const { movieId } = useParams();
@@ -18,37 +18,32 @@ const TheatreListing = () => {
   const [selectedDate, setSelectedDate] = useState(dates[0].toDateString());
 
   useEffect(() => {
-    fetchShows();
-  }, [movieId]);
-
-  const fetchShows = async () => {
-    try {
-      const res = await fetch('http://localhost:5000/api/admin/shows');
-      const data = await res.json();
-      if (data.success) {
-        // Filter by movieId and only published shows
-        // If movieId is a mock ID (e.g. "1"), show all published shows for testing
-        const movieShows = data.shows.filter(s => {
-          if (!s.isPublished) return false;
-          if (movieId && movieId.length === 24) {
-             return s.movie?._id === movieId;
+    const fetchShows = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/admin/shows');
+        const data = await res.json();
+        if (data.success) {
+          const movieShows = data.shows.filter(s => {
+            if (!s.isPublished) return false;
+            if (movieId && movieId.length === 24) {
+               return s.movie?._id === movieId;
+            }
+            return true;
+          });
+          setShows(movieShows);
+          
+          if (movieShows.length > 0 && !movie) {
+            setMovie(movieShows[0].movie);
+          } else if (!movie) {
+            setMovie({ title: "Selected Movie", languages: "English", format: "2D" });
           }
-          return true; // Mock mode
-        });
-        setShows(movieShows);
-        
-        // Extract movie details from the first show if available
-        if (movieShows.length > 0 && !movie) {
-          setMovie(movieShows[0].movie);
-        } else if (!movie) {
-          // Fallback mock if no shows exist but we want to show a title
-          setMovie({ title: "Selected Movie", languages: "English", format: "2D" });
         }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    };
+    fetchShows();
+  }, [movieId, movie]);
 
   // Filter shows by selected date
   const filteredShows = shows.filter(s => new Date(s.date).toDateString() === selectedDate);

@@ -12,25 +12,24 @@ const CheckoutSummary = () => {
   const GST_PERCENTAGE = 0.18; // 18% on convenience fee
 
   useEffect(() => {
-    fetchBookingDetails();
-  }, [bookingId]);
-
-  const fetchBookingDetails = async () => {
-    try {
-      const res = await fetch(`http://localhost:5000/api/bookings/${bookingId}`);
-      const data = await res.json();
-      if (data.success) {
-        setBooking(data.booking);
-      } else {
-        alert('Booking not found or expired.');
-        navigate('/');
+    const fetchBookingDetails = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/bookings/${bookingId}`);
+        const data = await res.json();
+        if (data.success) {
+          setBooking(data.booking);
+        } else {
+          alert('Booking not found or expired.');
+          navigate('/');
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+    fetchBookingDetails();
+  }, [bookingId, navigate]);
 
   const handlePayment = async () => {
     try {

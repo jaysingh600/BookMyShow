@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaUser, FaHistory, FaCalendarCheck, FaSignOutAlt, FaTicketAlt, FaBan } from 'react-icons/fa';
 
@@ -9,11 +9,7 @@ const UserDashboard = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchUserData();
-  }, []);
-
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -40,7 +36,13 @@ const UserDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    fetchUserData();
+  }, [fetchUserData]);
+
+
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -197,7 +199,6 @@ const UserDashboard = () => {
 
 const BookingCard = ({ booking, isPast, onCancel }) => {
   const { show, seats, totalAmount, status, refundStatus, _id } = booking;
-  const showDate = new Date(show.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
   const isCancelled = status === 'CANCELLED';
 
   return (

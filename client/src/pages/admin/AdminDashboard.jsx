@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer,
-  LineChart, Line, AreaChart, Area
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
+  AreaChart, Area
 } from 'recharts';
 import { FaUsers, FaTicketAlt, FaRupeeSign, FaFilm, FaChartLine } from 'react-icons/fa';
 import { io } from 'socket.io-client';
