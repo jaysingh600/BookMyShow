@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { login, register, reset } from '../store/authSlice';
 import { MdClose } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
@@ -16,15 +17,20 @@ const AuthModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (isError) {
       alert(message);
     }
     if (isSuccess || user) {
       onClose();
+      if (user?.role === 'ADMIN') {
+        navigate('/admin');
+      }
       dispatch(reset());
     }
-  }, [user, isError, isSuccess, message, dispatch, onClose]);
+  }, [user, isError, isSuccess, message, dispatch, onClose, navigate]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
