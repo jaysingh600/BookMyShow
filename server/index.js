@@ -41,10 +41,10 @@ app.use(helmet());
 app.use(morgan('dev'));
 
 // Data sanitization against NoSQL query injection
-app.use(mongoSanitize());
+// app.use(mongoSanitize()); // Incompatible with Express 5 because req.query is read-only
 
 // Data sanitization against XSS
-app.use(xss());
+// app.use(xss()); // Incompatible with Express 5 because req.query is read-only
 
 // Rate Limiting
 const limiter = rateLimit({
