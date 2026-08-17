@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, reset } from '../store/authSlice';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaSearch, FaChevronDown } from 'react-icons/fa';
 import CityModal from './CityModal';
 
@@ -11,9 +11,12 @@ const Navbar = ({ onOpenAuthModal }) => {
   const dispatch = useDispatch();
   const [isCityModalOpen, setIsCityModalOpen] = useState(false);
 
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     dispatch(logout());
     dispatch(reset());
+    navigate('/');
   };
 
   return (

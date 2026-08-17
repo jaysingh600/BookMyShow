@@ -8,6 +8,9 @@ export const register = createAsyncThunk('auth/register', async (userData, thunk
     const response = await axios.post(`${API_URL}/register`, userData);
     if (response.data) {
       localStorage.setItem('user', JSON.stringify(response.data));
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+      }
     }
     return response.data;
   } catch (error) {
@@ -21,6 +24,9 @@ export const login = createAsyncThunk('auth/login', async (userData, thunkAPI) =
     const response = await axios.post(`${API_URL}/login`, userData);
     if (response.data) {
       localStorage.setItem('user', JSON.stringify(response.data));
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+      }
     }
     return response.data;
   } catch (error) {
@@ -31,6 +37,7 @@ export const login = createAsyncThunk('auth/login', async (userData, thunkAPI) =
 
 export const logout = createAsyncThunk('auth/logout', async () => {
   localStorage.removeItem('user');
+  localStorage.removeItem('token');
 });
 
 const user = JSON.parse(localStorage.getItem('user'));

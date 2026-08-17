@@ -23,12 +23,14 @@ const AuthModal = ({ isOpen, onClose }) => {
     if (isError) {
       alert(message);
     }
-    if (isSuccess || user) {
+    if (isSuccess) {
       onClose();
       if (user?.role === 'ADMIN') {
         navigate('/admin');
       }
       dispatch(reset());
+    } else if (user) {
+      onClose();
     }
   }, [user, isError, isSuccess, message, dispatch, onClose, navigate]);
 
