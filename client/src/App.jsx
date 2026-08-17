@@ -17,6 +17,9 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import CheckoutSummary from './pages/CheckoutSummary';
 import TicketConfirmation from './pages/TicketConfirmation';
 import UserDashboard from './pages/UserDashboard';
+import MoviesPage from './pages/MoviesPage';
+import GenericCategoryPage from './pages/GenericCategoryPage';
+
 function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
@@ -34,6 +37,12 @@ function App() {
             <Route path="/checkout/:bookingId" element={<CheckoutSummary />} />
             <Route path="/ticket/:bookingId" element={<TicketConfirmation />} />
             <Route path="/dashboard" element={<UserDashboard />} />
+            <Route path="/movies" element={<MoviesPage />} />
+            <Route path="/stream" element={<GenericCategoryPage title="Stream" description="Watch your favorite content online" />} />
+            <Route path="/events" element={<GenericCategoryPage title="Events" description="Discover upcoming events in your city" />} />
+            <Route path="/plays" element={<GenericCategoryPage title="Plays" description="Experience live theatre performances" />} />
+            <Route path="/sports" element={<GenericCategoryPage title="Sports" description="Catch the live sporting action" />} />
+            <Route path="/activities" element={<GenericCategoryPage title="Activities" description="Fun things to do around you" />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
