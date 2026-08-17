@@ -19,6 +19,7 @@ import TicketConfirmation from './pages/TicketConfirmation';
 import UserDashboard from './pages/UserDashboard';
 import MoviesPage from './pages/MoviesPage';
 import GenericCategoryPage from './pages/GenericCategoryPage';
+import ListYourShowPage from './pages/ListYourShowPage';
 
 function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -43,6 +44,7 @@ function App() {
             <Route path="/plays" element={<GenericCategoryPage title="Plays" description="Experience live theatre performances" />} />
             <Route path="/sports" element={<GenericCategoryPage title="Sports" description="Catch the live sporting action" />} />
             <Route path="/activities" element={<GenericCategoryPage title="Activities" description="Fun things to do around you" />} />
+            <Route path="/list-your-show" element={<ListYourShowPage />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
