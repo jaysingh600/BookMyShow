@@ -8,7 +8,7 @@ const addCities = async () => {
     await mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/cinereserve');
     console.log('Connected to DB');
 
-    const citiesToAdd = ['Chandigarh', 'Mohali', 'Delhi'];
+    const citiesToAdd = ['Ranchi', 'Aurangabad', 'Gaya', 'Gurugram', 'Punjab'];
 
     for (const cityName of citiesToAdd) {
       const existing = await City.findOne({ name: { $regex: new RegExp(`^${cityName}$`, 'i') } });
