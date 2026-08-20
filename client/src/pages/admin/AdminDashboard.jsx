@@ -43,7 +43,7 @@ const AdminDashboard = () => {
   };
 
   if (loading) {
-    return <div className="flex h-[80vh] items-center justify-center text-gray-500 font-bold">Loading Dashboard...</div>;
+    return <div className="flex h-[80vh] items-center justify-center text-slate-400 font-bold">Loading Dashboard...</div>;
   }
 
   if (!stats) {
@@ -51,66 +51,77 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="space-y-8 animate-fade-in">
+      <div className="flex justify-between items-center mb-8">
         <div>
-          <h2 className="text-3xl font-black text-dark">Dashboard Overview</h2>
-          <p className="text-gray-500 text-sm mt-1">Real-time commercial metrics & analytics</p>
+          <h2 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">Dashboard Overview</h2>
+          <p className="text-slate-400 text-sm mt-1 tracking-wide">Real-time commercial metrics & analytics</p>
         </div>
-        <button onClick={fetchStats} className="bg-white border border-gray-200 text-gray-600 hover:text-primary px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
-          Refresh Data
+        <button onClick={fetchStats} className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 text-slate-300 hover:text-white hover:bg-slate-700 hover:border-slate-600 px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg transition-all duration-300 flex items-center gap-2 group">
+          <FaChartLine className="group-hover:text-primary transition-colors" /> Refresh Data
         </button>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-        <StatCard title="Total Users" value={stats.totalUsers} icon={<FaUsers />} color="bg-blue-500" />
-        <StatCard title="Total Bookings" value={stats.totalBookings} icon={<FaTicketAlt />} color="bg-green-500" />
-        <StatCard title="Total Revenue" value={`₹${stats.totalRevenue.toLocaleString()}`} icon={<FaRupeeSign />} color="bg-yellow-500" />
-        <StatCard title="Active Shows" value={stats.activeShows} icon={<FaFilm />} color="bg-purple-500" />
-        <StatCard title="Occupancy Rate" value={stats.occupancyRate} icon={<FaChartLine />} color="bg-red-500" />
+        <StatCard title="Total Users" value={stats.totalUsers} icon={<FaUsers />} colorFrom="from-blue-600" colorTo="to-blue-400" />
+        <StatCard title="Total Bookings" value={stats.totalBookings} icon={<FaTicketAlt />} colorFrom="from-emerald-600" colorTo="to-emerald-400" />
+        <StatCard title="Total Revenue" value={`₹${stats.totalRevenue.toLocaleString()}`} icon={<FaRupeeSign />} colorFrom="from-amber-600" colorTo="to-amber-400" />
+        <StatCard title="Active Shows" value={stats.activeShows} icon={<FaFilm />} colorFrom="from-purple-600" colorTo="to-purple-400" />
+        <StatCard title="Occupancy Rate" value={stats.occupancyRate} icon={<FaChartLine />} colorFrom="from-red-600" colorTo="to-red-400" />
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
         
         {/* Revenue Chart */}
-        <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-          <h3 className="text-lg font-bold text-dark mb-6 flex items-center gap-2">
-            <FaRupeeSign className="text-primary" /> Revenue Over Time
+        <div className="bg-slate-900/50 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-slate-700/50 relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-transparent opacity-50 group-hover:opacity-100 transition-opacity"></div>
+          <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-3">
+            <div className="p-2 bg-primary/20 rounded-lg"><FaRupeeSign className="text-primary" /></div> 
+            Revenue Over Time
           </h3>
-          <div className="h-72">
+          <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={stats.revenueData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
+                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.4}/>
                     <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6b7280' }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6b7280' }} />
-                <RechartsTooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-                <Area type="monotone" dataKey="revenue" stroke="#ef4444" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
+                <RechartsTooltip contentStyle={{ borderRadius: '12px', border: '1px solid rgba(51, 65, 85, 0.5)', backgroundColor: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(8px)', color: '#fff' }} itemStyle={{ color: '#ef4444' }} />
+                <Area type="monotone" dataKey="revenue" stroke="#ef4444" strokeWidth={4} fillOpacity={1} fill="url(#colorRevenue)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Bookings Chart */}
-        <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-          <h3 className="text-lg font-bold text-dark mb-6 flex items-center gap-2">
-            <FaTicketAlt className="text-primary" /> Weekly Bookings
+        <div className="bg-slate-900/50 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-slate-700/50 relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-transparent opacity-50 group-hover:opacity-100 transition-opacity"></div>
+          <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-3">
+            <div className="p-2 bg-blue-500/20 rounded-lg"><FaTicketAlt className="text-blue-500" /></div> 
+            Weekly Bookings
           </h3>
-          <div className="h-72">
+          <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.bookingsData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6b7280' }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6b7280' }} />
-                <RechartsTooltip cursor={{ fill: '#f9fafb' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-                <Bar dataKey="bookings" fill="#111827" radius={[4, 4, 0, 0]} barSize={40} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
+                <RechartsTooltip cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }} contentStyle={{ borderRadius: '12px', border: '1px solid rgba(51, 65, 85, 0.5)', backgroundColor: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(8px)', color: '#fff' }} itemStyle={{ color: '#3b82f6' }} />
+                <Bar dataKey="bookings" fill="url(#colorBookings)" radius={[6, 6, 0, 0]} barSize={40}>
+                   <defs>
+                    <linearGradient id="colorBookings" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#3b82f6" stopOpacity={1}/>
+                      <stop offset="100%" stopColor="#1d4ed8" stopOpacity={0.8}/>
+                    </linearGradient>
+                  </defs>
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -121,17 +132,17 @@ const AdminDashboard = () => {
   );
 };
 
-const StatCard = ({ title, value, icon, color }) => (
-  <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-100 flex flex-col justify-between hover:shadow-lg transition-shadow relative overflow-hidden group">
-    <div className={`absolute top-0 right-0 w-24 h-24 ${color} rounded-bl-full opacity-10 transition-transform group-hover:scale-110 z-0`}></div>
+const StatCard = ({ title, value, icon, colorFrom, colorTo }) => (
+  <div className="bg-slate-900/40 backdrop-blur-md p-6 rounded-3xl shadow-xl border border-slate-700/50 flex flex-col justify-between hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+    <div className={`absolute -right-6 -top-6 w-32 h-32 bg-gradient-to-br ${colorFrom} ${colorTo} rounded-full opacity-20 blur-2xl group-hover:opacity-40 transition-opacity duration-500`}></div>
     <div className="flex justify-between items-start mb-4 relative z-10">
-      <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white ${color} shadow-lg`}>
+      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white bg-gradient-to-br ${colorFrom} ${colorTo} shadow-lg shadow-black/20 text-xl`}>
         {icon}
       </div>
     </div>
     <div className="relative z-10">
-      <h4 className="text-gray-500 text-sm font-bold uppercase tracking-wider mb-1">{title}</h4>
-      <p className="text-3xl font-black text-dark">{value}</p>
+      <h4 className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">{title}</h4>
+      <p className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-300">{value}</p>
     </div>
   </div>
 );
