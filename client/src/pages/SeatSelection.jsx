@@ -80,6 +80,18 @@ const SeatSelection = () => {
       });
     });
 
+    newSocket.on('networkDownConflict', (data) => {
+      if (!selectedSeats || selectedSeats.length === 0) return;
+      const mySeats = selectedSeats;
+      const conflictSeats = data.seats || [];
+      const hasConflict = mySeats.some(seat => conflictSeats.includes(seat));
+      
+      if (hasConflict) {
+        alert("your network is down");
+        navigate('/');
+      }
+    });
+
     return () => {
       newSocket.disconnect();
     };
@@ -152,6 +164,11 @@ const SeatSelection = () => {
       const holdData = await holdRes.json();
 
       if (!holdData.success) {
+        if (holdData.message === 'NETWORK_DOWN') {
+          alert('your network is down');
+          navigate('/');
+          return;
+        }
         alert(holdData.message || 'Failed to hold seats. They might have just been booked.');
         // Refresh show data to get latest booked seats
         fetchShowData();

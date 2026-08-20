@@ -59,7 +59,22 @@ export const holdSeats = async (req, res) => {
       // Code 11000 = Duplicate Key Error (Someone else holds the seat concurrently)
       if (insertError.code === 11000) {
         if (useTransaction) await session.abortTransaction();
-        return res.status(409).json({ success: false, message: 'Seat has just been booked or held by another user.' });
+        
+        // Custom logic: cancel both users and redirect to home with "network is down"
+        const existingHolds = await SeatHold.find({ show: showId, seatId: { $in: seats } });
+        const existingBookingIds = existingHolds.map(h => h.bookingId).filter(Boolean);
+        
+        if (existingBookingIds.length > 0) {
+          await SeatHold.deleteMany({ bookingId: { $in: existingBookingIds } });
+          await Booking.deleteMany({ _id: { $in: existingBookingIds }, status: 'HOLD' });
+        }
+        
+        // Notify other user(s) via Socket.IO
+        if (req.app.get('io')) {
+          req.app.get('io').to(showId.toString()).emit('networkDownConflict', { seats });
+        }
+
+        return res.status(409).json({ success: false, message: 'NETWORK_DOWN' });
       }
       throw insertError;
     }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
 
 const CheckoutSummary = () => {
   const { bookingId } = useParams();
@@ -30,6 +31,28 @@ const CheckoutSummary = () => {
     };
     fetchBookingDetails();
   }, [bookingId, navigate]);
+
+  useEffect(() => {
+    if (!booking) return;
+
+    const newSocket = io('http://localhost:5000');
+    newSocket.emit('joinShow', booking.show._id);
+
+    newSocket.on('networkDownConflict', (data) => {
+      const mySeats = booking.seats;
+      const conflictSeats = data.seats || [];
+      const hasConflict = mySeats.some(seat => conflictSeats.includes(seat));
+      
+      if (hasConflict) {
+        alert("your network is down");
+        navigate('/');
+      }
+    });
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [booking, navigate]);
 
   const handlePayment = async () => {
     try {
