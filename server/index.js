@@ -38,7 +38,7 @@ app.use(cors({
   credentials: true,
 }));
 app.use(helmet());
-app.use(morgan('dev'));
+// app.use(morgan('dev')); // Disabled to avoid terminal spam
 
 // Data sanitization against NoSQL query injection
 // app.use(mongoSanitize()); // Incompatible with Express 5 because req.query is read-only
@@ -70,7 +70,7 @@ app.get('/api/health', (req, res) => {
 const lockedSeats = {}; // Format: { showId: { seatId: socketId } }
 
 io.on('connection', (socket) => {
-  console.log('New client connected:', socket.id);
+  // console.log('New client connected:', socket.id);
   
   // Send current locked seats when a client joins a show
   socket.on('joinShow', (showId) => {
@@ -102,7 +102,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('Client disconnected:', socket.id);
+    // console.log('Client disconnected:', socket.id);
     // Find all seats locked by this socket and unlock them
     for (const showId in lockedSeats) {
       for (const seatId in lockedSeats[showId]) {
