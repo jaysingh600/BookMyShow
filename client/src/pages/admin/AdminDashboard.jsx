@@ -43,7 +43,7 @@ const AdminDashboard = () => {
   };
 
   if (loading) {
-    return <div className="flex h-[80vh] items-center justify-center text-slate-400 font-bold">Loading Dashboard...</div>;
+    return <div className="flex h-[80vh] items-center justify-center text-gray-500 font-bold">Loading Dashboard...</div>;
   }
 
   if (!stats) {
@@ -54,10 +54,10 @@ const AdminDashboard = () => {
     <div className="space-y-8 animate-fade-in">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h2 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">Dashboard Overview</h2>
-          <p className="text-slate-400 text-sm mt-1 tracking-wide">Real-time commercial metrics & analytics</p>
+          <h2 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600">Dashboard Overview</h2>
+          <p className="text-gray-500 text-sm mt-1 tracking-wide">Real-time commercial metrics & analytics</p>
         </div>
-        <button onClick={fetchStats} className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 text-slate-300 hover:text-white hover:bg-slate-700 hover:border-slate-600 px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg transition-all duration-300 flex items-center gap-2 group">
+        <button onClick={fetchStats} className="bg-white/80 backdrop-blur-md border border-gray-200 text-gray-700 hover:text-primary hover:bg-gray-50 hover:border-gray-300 px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg transition-all duration-300 flex items-center gap-2 group">
           <FaChartLine className="group-hover:text-primary transition-colors" /> Refresh Data
         </button>
       </div>
@@ -75,9 +75,9 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
         
         {/* Revenue Chart */}
-        <div className="bg-slate-900/50 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-slate-700/50 relative overflow-hidden group">
+        <div className="bg-white/90 backdrop-blur-xl p-6 rounded-3xl shadow-xl border border-gray-200 relative overflow-hidden group">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-transparent opacity-50 group-hover:opacity-100 transition-opacity"></div>
-          <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-3">
+          <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-3">
             <div className="p-2 bg-primary/20 rounded-lg"><FaRupeeSign className="text-primary" /></div> 
             Revenue Over Time
           </h3>
@@ -90,10 +90,10 @@ const AdminDashboard = () => {
                     <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
-                <RechartsTooltip contentStyle={{ borderRadius: '12px', border: '1px solid rgba(51, 65, 85, 0.5)', backgroundColor: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(8px)', color: '#fff' }} itemStyle={{ color: '#ef4444' }} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} />
+                <RechartsTooltip contentStyle={{ borderRadius: '12px', border: '1px solid rgba(226, 232, 240, 1)', backgroundColor: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(8px)', color: '#0f172a' }} itemStyle={{ color: '#ef4444' }} />
                 <Area type="monotone" dataKey="revenue" stroke="#ef4444" strokeWidth={4} fillOpacity={1} fill="url(#colorRevenue)" />
               </AreaChart>
             </ResponsiveContainer>
@@ -101,19 +101,19 @@ const AdminDashboard = () => {
         </div>
 
         {/* Bookings Chart */}
-        <div className="bg-slate-900/50 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-slate-700/50 relative overflow-hidden group">
+        <div className="bg-white/90 backdrop-blur-xl p-6 rounded-3xl shadow-xl border border-gray-200 relative overflow-hidden group">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-transparent opacity-50 group-hover:opacity-100 transition-opacity"></div>
-          <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-3">
+          <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-3">
             <div className="p-2 bg-blue-500/20 rounded-lg"><FaTicketAlt className="text-blue-500" /></div> 
             Weekly Bookings
           </h3>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.bookingsData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
-                <RechartsTooltip cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }} contentStyle={{ borderRadius: '12px', border: '1px solid rgba(51, 65, 85, 0.5)', backgroundColor: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(8px)', color: '#fff' }} itemStyle={{ color: '#3b82f6' }} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} />
+                <RechartsTooltip cursor={{ fill: 'rgba(0, 0, 0, 0.05)' }} contentStyle={{ borderRadius: '12px', border: '1px solid rgba(226, 232, 240, 1)', backgroundColor: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(8px)', color: '#0f172a' }} itemStyle={{ color: '#3b82f6' }} />
                 <Bar dataKey="bookings" fill="url(#colorBookings)" radius={[6, 6, 0, 0]} barSize={40}>
                    <defs>
                     <linearGradient id="colorBookings" x1="0" y1="0" x2="0" y2="1">
@@ -133,16 +133,16 @@ const AdminDashboard = () => {
 };
 
 const StatCard = ({ title, value, icon, colorFrom, colorTo }) => (
-  <div className="bg-slate-900/40 backdrop-blur-md p-6 rounded-3xl shadow-xl border border-slate-700/50 flex flex-col justify-between hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+  <div className="bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-gray-200 flex flex-col justify-between hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
     <div className={`absolute -right-6 -top-6 w-32 h-32 bg-gradient-to-br ${colorFrom} ${colorTo} rounded-full opacity-20 blur-2xl group-hover:opacity-40 transition-opacity duration-500`}></div>
     <div className="flex justify-between items-start mb-4 relative z-10">
-      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white bg-gradient-to-br ${colorFrom} ${colorTo} shadow-lg shadow-black/20 text-xl`}>
+      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white bg-gradient-to-br ${colorFrom} ${colorTo} shadow-lg shadow-black/10 text-xl`}>
         {icon}
       </div>
     </div>
     <div className="relative z-10">
-      <h4 className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">{title}</h4>
-      <p className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-300">{value}</p>
+      <h4 className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-2">{title}</h4>
+      <p className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600">{value}</p>
     </div>
   </div>
 );
